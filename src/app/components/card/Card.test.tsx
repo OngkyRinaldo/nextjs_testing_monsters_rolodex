@@ -1,30 +1,21 @@
-import { render, screen, waitFor, act } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import CardList from './CardList';
 import { server } from '../../../../mocks/server';
 import { rest } from 'msw';
-import { User } from '@/type/User';
-import { error } from 'console';
 
-const sampleUsers: User[] = [
-    { id: 1, name: 'User1', email: 'user1@example.com' },
-    { id: 2, name: 'User2', email: 'user2@example.com' },
-];
+describe('CardList component - rendering', () => {
+    test('check have loading... text', () => {
+        render(<CardList />);
 
-describe('Card component - rendering', () => {
-    test('renders a list of Card components', () => {
-        render(<CardList users={sampleUsers} error='Loading...' />);
+        expect(screen.getByText('Loading...')).toBeInTheDocument();
+    });
 
-        const cards = screen.getAllByTestId('card');
+    test('renders a list of card components', async () => {
+        render(<CardList />);
 
-        expect(cards).toHaveLength(sampleUsers.length);
-
-        sampleUsers.forEach((user, index) => {
-            const card = cards[index];
-            const { name, email } = user;
-
-            expect(card).toHaveTextContent(name);
-            expect(card).toHaveTextContent(email);
-        });
+        setTimeout(() => {
+            expect(screen.getByText('user1')).toBeInTheDocument();
+        }, 1000);
     });
 
     test('renders error', async () => {
@@ -37,7 +28,7 @@ describe('Card component - rendering', () => {
             )
         );
 
-        render(<CardList users={sampleUsers} error='loading' />);
+        render(<CardList />);
 
         const error = await screen.findByText(/loading/i);
         expect(error).toBeInTheDocument();

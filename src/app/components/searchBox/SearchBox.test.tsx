@@ -3,28 +3,21 @@ import SearchBox from './SearchBox';
 
 describe('SearchBox components - rendering', () => {
     test('should have element input and placeholder have text search monsters...', () => {
-        const mockOnChangeHandler = jest.fn();
-        render(<SearchBox onChangeHandler={mockOnChangeHandler} />);
-
+        render(<SearchBox />);
         expect(screen.getByRole('searchbox')).toBeInTheDocument();
         expect(
             screen.getByPlaceholderText(/search monsters.../i)
         ).toBeInTheDocument();
     });
-
     test('SearchBox onChange event', () => {
-        const mockOnChangeHandler = jest.fn();
+        render(<SearchBox />);
 
-        render(<SearchBox onChangeHandler={mockOnChangeHandler} />);
-
-        const searchInput = screen.getByPlaceholderText(
+        const inputElement = screen.getByPlaceholderText(
             'search monsters...'
         ) as HTMLInputElement;
 
-        fireEvent.change(searchInput, { target: { value: 'userInput' } });
+        fireEvent.change(inputElement, { target: { value: 'user1' } });
 
-        expect(searchInput.value).toBe('userInput');
-
-        expect(mockOnChangeHandler).toHaveBeenCalled();
+        expect(inputElement.value).toBe('user1');
     });
 });
